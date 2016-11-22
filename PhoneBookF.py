@@ -12,18 +12,17 @@ def update_phone_book(name, tel):
     phone_book[name] = tel
 
 
-def get_data_from_user(param):
-    while True:
-        value = raw_input(param).strip()
-        if not value:
-            raise ValueError('You entered empty string')
-        return value
-
-
 def del_entry_from_phonebook(name):
     if name not in phone_book:
         raise ValueError('No such entry in PhoneBook')
     del phone_book[name]
+
+
+def get_data_from_user(param):
+    while True:
+        name = raw_input(param).strip()
+        if name:
+            return name
 
 
 print "Welcome to PhoneBook."
@@ -49,14 +48,8 @@ while True:
 
     if command == 'add':
         print "add"
-        try:
-            name = get_data_from_user("name?")
-        except ValueError as e:
-            print e
-        try:
-            tel = get_data_from_user("tel?")
-        except ValueError as e:
-            print e
+        name = get_data_from_user("name?")
+        tel = get_data_from_user("tel?")
         try:
             add_entry_to_phonebook(name, tel)
             print "%s: %s added successfully." %(name, tel)
@@ -72,7 +65,7 @@ while True:
             print e
     elif command == 'upd':
         print "upd"
-        name_to_update = get_data_from_user("name?")
+        name_to_update = get_data_from_user("name")
         if name_to_update in phone_book:
             tel = get_data_from_user("tel?")
             update_phone_book(name, tel)
@@ -98,4 +91,4 @@ while True:
         print "Exit."
         break
     else:
-        print "Bad command. Please input correct one! "
+        print "Bad command. Please input correct one!"
