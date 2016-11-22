@@ -36,7 +36,6 @@ lst - List Contacts
 srch - search by name
 help - print this message
 exit - Exit from PhoneBook
-
 """
 
 print hlp_msg
