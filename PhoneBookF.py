@@ -98,4 +98,4 @@ while True:
         print "Exit."
         break
     else:
-        print "Bad command. Please input correct one!"
+        print "Bad command. Please input correct one! "
