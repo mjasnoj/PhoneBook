@@ -7,15 +7,19 @@ def add_entry_to_phonebook(name, tel):
     phone_book[name] = tel
 
 
+def del_entry_from_phonebook(name):
+    if name not in phone_book:
+        raise ValueError('No such entry in PhoneBook')
+    del phone_book[name]
+
+
 def update_phone_book(name, tel):
     # phone_book.update({name: tel})
     phone_book[name] = tel
 
 
-def del_entry_from_phonebook(name):
-    if name not in phone_book:
-        raise ValueError('No such entry in PhoneBook')
-    del phone_book[name]
+def search_name_in_phonebook(name):
+    pass
 
 
 def get_data_from_user(param):
@@ -40,7 +44,7 @@ exit - Exit from PhoneBook.
 
 print hlp_msg
 
-commands = ['add', 'del', 'upd', 'lst', 'exit', 'srch', 'help']
+commands = { 'add', 'del', 'upd', 'lst', 'exit', 'srch', 'help' }
 phone_book = {}
 
 while True:
