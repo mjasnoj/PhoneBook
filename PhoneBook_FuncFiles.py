@@ -23,14 +23,14 @@ def update_dbfile_dec(f):
 
 
 @update_dbfile_dec
-def add_entry_to_phonebook(name, tel):
+def add_entry_to_phone_book(name, tel):
     if name in phone_book:
         raise ValueError('Such name already exists')
     phone_book[name] = tel
 
 
 @update_dbfile_dec
-def del_entry_from_phonebook(name):
+def del_entry_from_phone_book(name):
     if name not in phone_book:
         raise ValueError('No such entry in PhoneBook')
     del phone_book[name]
@@ -42,7 +42,7 @@ def update_phone_book(name, tel):
     phone_book[name] = tel
 
 
-def search_name_in_phonebook(name):
+def search_name_in_phone_book(name):
     pass
 
 
@@ -76,7 +76,7 @@ except (EOFError, IOError) as e:
 
 print HLP_MSG
 
-commands = { 'add', 'del', 'upd', 'lst', 'exit', 'srch', 'help'}
+commands = {'add', 'del', 'upd', 'lst', 'exit', 'srch', 'help'}
 
 while True:
     command = raw_input("?").strip()
@@ -86,7 +86,7 @@ while True:
         name = get_data_from_user("name?")
         tel = get_data_from_user("tel?")
         try:
-            add_entry_to_phonebook(name, tel)
+            add_entry_to_phone_book(name, tel)
             print "%s: %s added successfully." %(name, tel)
         except ValueError as e:
             print e
@@ -94,7 +94,7 @@ while True:
         print "del"
         name_to_delete = get_data_from_user("name?")
         try:
-            del_entry_from_phonebook(name_to_delete)
+            del_entry_from_phone_book(name_to_delete)
             print "%s successfully deleted" % name_to_delete
         except ValueError as e:
             print e
