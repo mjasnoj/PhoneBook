@@ -1,18 +1,42 @@
 # coding=utf-8
+import pickle
 
 
+def get_data_from_dbfile(phone_book_db_file):
+    with open(phone_book_db_file, 'rt') as f:
+        phone_book_pickled = f.read()
+    return pickle.loads(phone_book_pickled)
+
+
+def update_dbfile(phone_book_dict, phone_book_db_file):
+    phone_book_pickled = pickle.dumps(phone_book_dict)
+    with open(phone_book_db_file, 'wt') as f:
+        f.write(phone_book_pickled)
+
+
+def update_dbfile_dec(f):
+    def wrapper(*args, **kwargs):
+        pbch = f(*args, **kwargs)
+        update_dbfile(phone_book, PHONE_BOOK_DB_FILE)
+        return pbch
+    return wrapper
+
+
+@update_dbfile_dec
 def add_entry_to_phonebook(name, tel):
     if name in phone_book:
         raise ValueError('Such name already exists')
     phone_book[name] = tel
 
 
+@update_dbfile_dec
 def del_entry_from_phonebook(name):
     if name not in phone_book:
         raise ValueError('No such entry in PhoneBook')
     del phone_book[name]
 
 
+@update_dbfile_dec
 def update_phone_book(name, tel):
     # phone_book.update({name: tel})
     phone_book[name] = tel
@@ -31,21 +55,28 @@ def get_data_from_user(param):
 
 print "Welcome to PhoneBook."
 
-hlp_msg="""
+HLP_MSG="""
 Available commands:
-add - Add Contact
-del - Delete Contact
-upd - Update Contact
-lst - List Contacts
+add  - Add Contact
+del  - Delete Contact
+upd  - Update Contact
+lst  - List Contacts
 srch - search by name
 help - print this message
 exit - Exit from PhoneBook.
 """
 
-print hlp_msg
+PHONE_BOOK_DB_FILE='phone_book_db.pickle'
 
-commands = { 'add', 'del', 'upd', 'lst', 'exit', 'srch', 'help' }
-phone_book = {}
+try:
+    phone_book = get_data_from_dbfile(PHONE_BOOK_DB_FILE)
+except (EOFError, IOError) as e:
+    print "Error loading data from file. Starting new phone_book."
+    phone_book = {}
+
+print HLP_MSG
+
+commands = { 'add', 'del', 'upd', 'lst', 'exit', 'srch', 'help'}
 
 while True:
     command = raw_input("?").strip()
@@ -64,7 +95,7 @@ while True:
         name_to_delete = get_data_from_user("name?")
         try:
             del_entry_from_phonebook(name_to_delete)
-            print "%s successfully deleted" % (name_to_delete)
+            print "%s successfully deleted" % name_to_delete
         except ValueError as e:
             print e
     elif command == 'upd':
@@ -72,9 +103,9 @@ while True:
         name_to_update = get_data_from_user("name")
         if name_to_update in phone_book:
             tel = get_data_from_user("tel?")
-            update_phone_book(name, tel)
+            update_phone_book(name_to_update, tel)
         else:
-            print "%s not in PhoneBook" % (name_to_update)
+            print "%s not in PhoneBook" % name_to_update
     elif command == 'lst':
         print "lst"
         if not phone_book:
@@ -88,11 +119,12 @@ while True:
         if name_to_search in phone_book:
             print phone_book[name_to_search]
         else:
-            print "no %s in PhoneBook" % (name_to_search)
+            print "no %s in PhoneBook" % name_to_search
     elif command == 'help':
-        print hlp_msg
+        print HLP_MSG
     elif command == 'exit':
         print "Exit."
+        update_dbfile(phone_book, PHONE_BOOK_DB_FILE)
         break
     else:
         print "Bad command. Please input correct one!"
