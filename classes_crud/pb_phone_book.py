@@ -1,6 +1,7 @@
 # coding: utf-8
 
-import pb_view
+#import pb_view
+import pb_view_telnet as pb_view
 import pb_db
 import pb_contact
 from settings import *

@@ -1,6 +1,7 @@
 # coding: utf-8
 
-import pb_view
+#import pb_view
+import pb_view_telnet as pb_view
 import pb_phone_book
 from settings import *
 
