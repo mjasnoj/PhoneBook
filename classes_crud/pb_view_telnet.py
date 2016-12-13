@@ -7,14 +7,12 @@ def get_data_from_user(param):
     while True:
         telnet_write(child, param)
         name = telnet_read(child).strip()
-        print name
         if name:
             return name
 
 
 def message_to_user(param):
     global child
-    print param
     telnet_write(child, param)
 
 
@@ -33,17 +31,15 @@ def iter_to_user(a):
 
 def telnet_read(c):
     data = c.recv(1024)
-    print data
     return data
 
 
 def telnet_write(c, user_content):
-    print user_content
     c.sendall(user_content)
 
 
 s = socket.socket()
-s.bind(('127.0.0.1', 8004))
+s.bind(('127.0.0.1', 8000))
 s.listen(5)
 print "Server started"
 
