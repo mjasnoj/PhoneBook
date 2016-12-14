@@ -3,14 +3,17 @@ from settings import *
 import pickle
 import csv
 import pb_contact
+import MySQLdb
 
 
 class PhoneBookDB(object):
-    def __new__(cls, file):
-        if file == 'csv':
+    def __new__(cls, db):
+        if db == 'csv':
             return PhoneBookDBCSV()
-        elif file == 'pickle':
+        elif db == 'pickle':
             return PhoneBookDBPickle()
+        elif db == 'mysql':
+            return PhoneBookDBMySQL()
         else:
             return PhoneBookDBPickle()
 
@@ -49,3 +52,36 @@ class PhoneBookDBCSV(PhoneBookDBBasic):
             for name in phone_book_dict:
                 print phone_book_dict[name].get_contact()
                 phone_book_csv.writerow(phone_book_dict[name].get_contact())
+
+
+class PhoneBookDBMySQL(PhoneBookDBBasic):
+    con = MySQLdb.connect(user='root', passwd='root', db='PB')
+
+    def __init__(self):
+        self.cursor = PhoneBookDBMySQL.con.cursor()
+
+    def get_data_from_file(self):
+        print "List"
+        self.cursor = PhoneBookDBMySQL.con.cursor()
+        self.cursor.execute("select * from PhoneBook")
+        for row in self.cursor:
+            print row
+
+    def update_file(self, phone_book_db_file):
+        pass
+
+    def new_phone_book(self):
+        self.cursor.execute(
+            "CREATE TABLE PhoneBook (id INT PRIMARY KEY AUTO_INCREMENT, name VARCHAR(20), tel VARCHAR(20)) "
+        )
+
+    def check_phone_book(self):
+        print "check"
+        self.cursor.execute(
+            "SELECT count(*) FROM information_schema.TABLES WHERE TABLE_NAME = 'PhoneBook'"
+        )
+        if int(self.cursor.fetchone()[0]) == 1:
+            return True
+        else:
+            return False
+

@@ -2,7 +2,8 @@
 
 #import pb_view
 import pb_view_telnet as pb_view
-import pb_phone_book
+# import pb_phone_book
+import pb_phone_book_mysql as pb_phone_book
 from settings import *
 
 
